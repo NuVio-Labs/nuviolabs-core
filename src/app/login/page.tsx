@@ -1,16 +1,22 @@
-import { signIn } from "@/auth"
+import { auth, signIn } from "@/auth"
 import { AuthError } from "next-auth"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { redirect } from "next/navigation"
 
 export default async function LoginPage({
     searchParams,
 }: {
     searchParams: Promise<{ error?: string }>
 }) {
+    const session = await auth();
+    if (session?.user) {
+        redirect("/t");
+    }
+
     const params = await searchParams;
     const errorMsg = params?.error === "CredentialsSignin" ? "Ungültige E Mail oder Passwort." : params?.error;
 
@@ -26,6 +32,7 @@ export default async function LoginPage({
                         action={async (formData) => {
                             "use server"
                             try {
+                                formData.append("redirectTo", "/t")
                                 await signIn("credentials", formData)
                             } catch (error) {
                                 if (error instanceof AuthError) {
