@@ -1,0 +1,24 @@
+﻿
+> nuvio-core@0.1.0 lint
+> eslint
+
+
+S:\WebDev\Antigravity Test\core-2026\nuvio-core\src\app\admin\tenants\new\page.tsx
+  11:11  warning  'user' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+S:\WebDev\Antigravity Test\core-2026\nuvio-core\src\app\admin\tenants\page.tsx
+  71:98  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+S:\WebDev\Antigravity Test\core-2026\nuvio-core\src\app\admin\tenants\page.tsx:71:98
+  69 |                                                         : 'bg-red-100/50 text-red-700 border border-red-200/50'
+  70 |                                                     }`}>
+> 71 |                                                     <span className={`w-1.5 h-1.5 rounded-full ${Math.random() > 0.5 ? 'bg-current' : 'bg-current animate-pulse'}`}></span>
+     |                                                                                                  ^^^^^^^^^^^^^ Cannot call impure function
+  72 |                                                     {tenant.status === 'active' ? 'Aktiv' : 'Gespeert'}
+  73 |                                                 </span>
+  74 |                                             </td>  react-hooks/purity
+
+Ô£û 2 problems (1 error, 1 warning)
+

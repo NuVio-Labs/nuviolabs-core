@@ -1,16 +1,23 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
+import { auth } from "@/auth"
 
-export function middleware(request: NextRequest) {
-    const sessionCookie = request.cookies.get('nuvio_session')?.value
+export async function middleware(request: NextRequest) {
+    const session = await auth()
 
-    if (sessionCookie !== 'ok') {
-        return NextResponse.redirect(new URL('/login', request.url))
+    // Protect /admin and /t routes
+    if (
+        request.nextUrl.pathname.startsWith("/admin") ||
+        request.nextUrl.pathname.startsWith("/t")
+    ) {
+        if (!session?.user) {
+            return NextResponse.redirect(new URL("/login", request.url))
+        }
     }
 
     return NextResponse.next()
 }
 
 export const config = {
-    matcher: '/test/:path*',
+    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 }

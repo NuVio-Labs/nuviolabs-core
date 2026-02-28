@@ -1,33 +1,52 @@
-"use client";
+import { signIn } from "@/auth"
+import { AuthError } from "next-auth"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
-import { useActionState } from "react";
-import { loginAction } from "@/app/actions/auth";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import Link from "next/link";
-
-const initialState = {
-    error: "",
-};
-
-export default function LoginPage() {
-    const [state, formAction, isPending] = useActionState(loginAction, initialState);
+export default async function LoginPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ error?: string }>
+}) {
+    const params = await searchParams;
+    const errorMsg = params?.error === "CredentialsSignin" ? "Ungültige E Mail oder Passwort." : params?.error;
 
     return (
         <div className="w-full max-w-md mt-12 mx-auto">
             <Card className="border-white/40 shadow-2xl bg-white/60 backdrop-blur-2xl rounded-2xl overflow-hidden">
                 <CardHeader className="text-center space-y-2 pb-6 pt-8">
                     <CardTitle className="text-3xl font-medium tracking-tight text-slate-900">NuVioLabs Core</CardTitle>
-                    <CardDescription className="text-slate-500 text-base">Kundenportal</CardDescription>
+                    <CardDescription className="text-slate-500 text-base">Platform Login</CardDescription>
                 </CardHeader>
                 <CardContent className="px-8 pb-8">
-                    <form action={formAction} className="space-y-5">
-                        {state?.error && (
+                    <form
+                        action={async (formData) => {
+                            "use server"
+                            try {
+                                await signIn("credentials", formData)
+                            } catch (error) {
+                                if (error instanceof AuthError) {
+                                    switch (error.type) {
+                                        case "CredentialsSignin":
+                                            // Next.js form actions don't expect a return value if we throw redirect later
+                                            // The Auth.js redirect will be caught. 
+                                            // If we really need to pass error state, we should use useFormState
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                                throw error
+                            }
+                        }}
+                        className="space-y-5"
+                    >
+                        {errorMsg && (
                             <Alert variant="destructive" className="bg-red-50/80 text-red-900 border-red-200/50 backdrop-blur-md">
-                                <AlertDescription>{state.error}</AlertDescription>
+                                <AlertDescription>{errorMsg}</AlertDescription>
                             </Alert>
                         )}
 
@@ -44,12 +63,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="password" className="text-slate-700 font-medium">Passwort</Label>
-                                <Link href="#" className="text-sm text-slate-500 hover:text-slate-900 transition-colors duration-300">
-                                    Passwort vergessen
-                                </Link>
-                            </div>
+                            <Label htmlFor="password" className="text-slate-700 font-medium">Passwort</Label>
                             <Input
                                 id="password"
                                 name="password"
@@ -62,13 +76,12 @@ export default function LoginPage() {
                         <Button
                             type="submit"
                             className="w-full bg-slate-900 hover:bg-slate-800 text-white transition-all duration-300 h-11 shadow-md shadow-slate-900/10 rounded-xl mt-2"
-                            disabled={isPending}
                         >
-                            {isPending ? "Lädt..." : "Einloggen"}
+                            Einloggen
                         </Button>
                     </form>
                 </CardContent>
             </Card>
         </div>
-    );
+    )
 }
