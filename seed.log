@@ -1,0 +1,29 @@
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+Running seed command `npx tsx prisma/seed.ts` ...
+Seeding Database...
+PrismaClientInitializationError: 
+Invalid `prisma.user.upsert()` invocation in
+S:\WebDev\Antigravity Test\core-2026\nuvio-core\prisma\seed.ts:9:37
+
+  6 console.log('Seeding Database...')
+  7 
+  8 // 1. Create or ensure Demo Admin exists
+→ 9 const admin = await prisma.user.upsert(
+Authentication failed against database server, the provided database credentials for `(not available)` are not valid.
+
+Please make sure to provide valid database credentials for the database server at the configured address.
+    at ei.handleRequestError (S:\WebDev\Antigravity Test\core-2026\nuvio-core\node_modules\@prisma\client\src\runtime\RequestHandler.ts:242:13)
+    at ei.handleAndLogRequestError (S:\WebDev\Antigravity Test\core-2026\nuvio-core\node_modules\@prisma\client\src\runtime\RequestHandler.ts:174:12)
+    at ei.request (S:\WebDev\Antigravity Test\core-2026\nuvio-core\node_modules\@prisma\client\src\runtime\RequestHandler.ts:143:12)
+    at async a (S:\WebDev\Antigravity Test\core-2026\nuvio-core\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:833:24)
+    at async main (S:\WebDev\Antigravity Test\core-2026\nuvio-core\prisma\seed.ts:9:19) {
+  clientVersion: '6.19.2',
+  errorCode: undefined,
+  retryable: undefined
+}
+
+An error occurred while running the seed command:
+Error: Command failed with exit code 1: npx tsx prisma/seed.ts

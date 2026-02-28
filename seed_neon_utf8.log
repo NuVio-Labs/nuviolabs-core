@@ -1,0 +1,88 @@
+﻿Seeding Database...
+node.exe : PrismaClient
+InitializationError: 
+In C:\nvm4w\nodejs\npx.
+ps1:16 Zeichen:5
++     & 
+"$basedir/node$exe"  "$
+basedir/node_modules/np
+m/bin/npx-cli.js" ...
++     ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PrismaClientI   
+ nitializationError    
+: :String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+Invalid 
+`prisma.user.upsert()` 
+invocation in
+S:\WebDev\Antigravity T
+est\core-2026\nuvio-cor
+e\prisma\seed.ts:9:37
+
+  6 
+console.log('Seeding 
+Database...')
+  7 
+  8 // 1. Create or 
+ensure Demo Admin 
+exists
+ÔåÆ 9 const admin = 
+await 
+prisma.user.upsert(
+Authentication failed 
+against database 
+server, the provided 
+database credentials 
+for `(not available)` 
+are not valid.
+
+Please make sure to 
+provide valid database 
+credentials for the 
+database server at the 
+configured address.
+    at 
+ei.handleRequestError 
+(S:\WebDev\Antigravity 
+Test\core-2026\nuvio-co
+re\node_modules\@prisma
+\client\src\runtime\Req
+uestHandler.ts:242:13)
+    at ei.handleAndLogR
+equestError 
+(S:\WebDev\Antigravity 
+Test\core-2026\nuvio-co
+re\node_modules\@prisma
+\client\src\runtime\Req
+uestHandler.ts:174:12)
+    at ei.request 
+(S:\WebDev\Antigravity 
+Test\core-2026\nuvio-co
+re\node_modules\@prisma
+\client\src\runtime\Req
+uestHandler.ts:143:12)
+    at async a 
+(S:\WebDev\Antigravity 
+Test\core-2026\nuvio-co
+re\node_modules\@prisma
+\client\src\runtime\get
+PrismaClient.ts:833:24)
+    at async main 
+(S:\WebDev\Antigravity 
+Test\core-2026\nuvio-co
+re\prisma\seed.ts:9:19)
+ {
+  clientVersion: 
+'6.19.2',
+  errorCode: undefined,
+  retryable: undefined
+}

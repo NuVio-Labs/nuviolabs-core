@@ -10,7 +10,7 @@ import { redirect } from "next/navigation"
 export default async function LoginPage({
     searchParams,
 }: {
-    searchParams: Promise<{ error?: string }>
+    searchParams: Promise<{ error?: string, from?: string }>
 }) {
     const session = await auth();
     if (session?.user) {
@@ -19,6 +19,7 @@ export default async function LoginPage({
 
     const params = await searchParams;
     const errorMsg = params?.error === "CredentialsSignin" ? "Ungültige E Mail oder Passwort." : params?.error;
+    const from = params?.from;
 
     return (
         <div className="w-full max-w-md mt-12 mx-auto">
@@ -32,7 +33,7 @@ export default async function LoginPage({
                         action={async (formData) => {
                             "use server"
                             try {
-                                formData.append("redirectTo", "/t")
+                                formData.append("redirectTo", from || "/t")
                                 await signIn("credentials", formData)
                             } catch (error) {
                                 if (error instanceof AuthError) {

@@ -4,6 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { signOut } from "@/auth"
+import { redirect } from "next/navigation"
+
+export const dynamic = "force-dynamic"
 
 export default async function TenantSwitchPage() {
     const user = await requireUser()
@@ -25,6 +28,10 @@ export default async function TenantSwitchPage() {
             include: { tenant: true }
         })
         tenants = memberships.map(m => m.tenant)
+    }
+
+    if (tenants.length === 1 && !isPlatformAdmin) {
+        redirect(`/t/${tenants[0].slug}`)
     }
 
     return (

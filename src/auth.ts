@@ -22,6 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                         where: { email: "admin@nuvio.local" }
                     })
 
+                    // Handle missing admin setup
                     if (!user) {
                         user = await prisma.user.create({
                             data: {
@@ -37,11 +38,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                             data: { isPlatformAdmin: true }
                         })
                     }
-                    return user
-                }
 
-                // Regular user login logic would go here
-                return null
+                    // Log Success
+                    await prisma.auditLog.create({
+                        data: {
+                            action: "login_success",
+                            userId: user.id,
+                            details: JSON.stringify({ email: user.email, provider: "credentials" })
+                        }
+                    })
+
+                    return user
+                } else {
+                    // Log Failure
+                    await prisma.auditLog.create({
+                        data: {
+                            action: "login_failed",
+                            details: JSON.stringify({ email: credentials.email, provider: "credentials", reason: "invalid_credentials" })
+                        }
+                    })
+                    return null
+                }
             }
         })
     ],
